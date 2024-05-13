@@ -1,15 +1,18 @@
 const express = require('express');
-const path = require('path');
 const app = express()
 
-app.use(express.static('./public'))
+const { products } = require('./data');
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, './navbar-app/index.html'))
+    res.json(products)
 })
 
-app.all('*', (req, res) => {
-    res.status(404).send('Resource not found')
+app.get('/products/:pId', (req, res) => {
+    const { pId } = req.params;
+
+    const product = products.find((product) => product.id === +pId)
+
+    res.json(product)
 })
 
 app.listen(5000, () => {
